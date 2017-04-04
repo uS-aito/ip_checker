@@ -18,9 +18,10 @@ class IpAddressTool(object):
     # print network, minimam host, maximam host, broadcast ip address
     def print_special_ip(self,ip_address):
         def long_address_mode(ip_address):
-            pass
+            slash_subnet = self._convert_subnet_type(ip_address.split(" ")[1])
+            slash_address_mode(ip_address.split(" ")[0]+slash_subnet)
 
-        def slash_mode(ip_address):
+        def slash_address_mode(ip_address):
             # split ip_address
             (address, subnet_mask) = ip_address.split("/")
             address = address.split(".")
@@ -55,20 +56,100 @@ class IpAddressTool(object):
             oldest_host_address = oldest_host_address + "/" + subnet_mask
 
             # print special addresses
+            print("Subnet mask: %s or %s" % ("/"+subnet_mask,self._convert_subnet_type("/"+subnet_mask)))
             print("Network address: %s" % network_address)
             print("Youngest host address: %s" % youngest_host_address)
             print("Oldest host address: %s" % oldest_host_address)
             print("Broadcast address: %s" % broadcast_address)
-
+        
         # check ip_address is valid
         if not self.is_valid_ip(ip_address):
             raise ValueError()
 
         if "/" in ip_address:
-            slash_mode(ip_address)
+            slash_address_mode(ip_address)
         else:
-            pass
+            long_address_mode(ip_address)
 
+    def _convert_subnet_type(self,subnet):
+        slash_to_long = {
+            '/22': '255.255.252.0', 
+            '/23': '255.255.254.0', 
+            '/6': '252.0.0.0', 
+            '/10': '255.192.0.0', 
+            '/8': '255.0.0.0', 
+            '/5': '248.0.0.0', 
+            '/16': '255.255.0.0', 
+            '/12': '255.240.0.0', 
+            '/28': '255.255.255.240', 
+            '/26': '255.255.255.192', 
+            '/13': '255.248.0.0', 
+            '/7': '254.0.0.0', 
+            '/3': '224.0.0.0', 
+            '/21': '255.255.248.0', 
+            '/14': '255.252.0.0', 
+            '/30': '255.255.255.252', 
+            '/15': '255.254.0.0', 
+            '/1': '128.0.0.0', 
+            '/17': '255.255.128.0', 
+            '/29': '255.255.255.248', 
+            '/27': '255.255.255.224', 
+            '/9': '255.128.0.0', 
+            '/18': '255.255.192.0', 
+            '/20': '255.255.240.0', 
+            '/25': '255.255.255.128', 
+            '/31': '255.255.255.254', 
+            '/4': '240.0.0.0', 
+            '/19': '255.255.224.0', 
+            '/2': '192.0.0.0', 
+            '/11': '255.224.0.0', 
+            '/32': '255.255.255.255', 
+            '/24': '255.255.255.0'
+        }
+        long_to_slash = {
+            '255.255.192.0': '/18', 
+            '255.252.0.0': '/14', 
+            '255.255.224.0': '/19', 
+            '255.255.240.0': '/20', 
+            '255.255.255.252': '/30', 
+            '255.248.0.0': '/13', 
+            '255.255.0.0': '/16', 
+            '240.0.0.0': '/4', 
+            '255.255.255.224': '/27', 
+            '255.255.252.0': '/22', 
+            '255.224.0.0': '/11', 
+            '255.254.0.0': '/15', 
+            '255.128.0.0': '/9', 
+            '248.0.0.0': '/5', 
+            '252.0.0.0': '/6', 
+            '192.0.0.0': '/2', 
+            '255.255.255.240': '/28', 
+            '255.255.255.192': '/26', 
+            '255.255.248.0': '/21', 
+            '255.255.254.0': '/23', 
+            '128.0.0.0': '/1', 
+            '255.255.255.128': '/25', 
+            '224.0.0.0': '/3', 
+            '255.255.255.254': '/31', 
+            '254.0.0.0': '/7', 
+            '255.0.0.0': '/8', 
+            '255.255.255.248': '/29', 
+            '255.192.0.0': '/10', 
+            '255.240.0.0': '/12', 
+            '255.255.128.0': '/17', 
+            '255.255.255.255': '/32', 
+            '255.255.255.0': '/24'
+        }
+        def long_address_mode(subnet):
+            return long_to_slash[subnet]
+
+        def slash_address_mode(subnet):
+            return slash_to_long[subnet]
+
+        if "/" in subnet:
+            return slash_address_mode(subnet)
+        else:
+            return long_address_mode(subnet)
 
 
 def main():
