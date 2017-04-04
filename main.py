@@ -1,6 +1,22 @@
 #coding: utf-8
 import sys
 import ip_address_tool
+from cmd import Cmd
+
+class ip_tool_class(Cmd):
+    def __init__(self):
+        Cmd.__init__(self)
+        self.iat = ip_address_tool.IpAddressTool()
+        self.prompt = "> "
+
+    def default(self,line):
+        if self.iat.is_valid_ip(line):
+            self.iat.print_special_ip(line)
+        else:
+            print("Invalid IP Address.")
+    
+    def do_exit(self,arg):
+        return True
 
 def main():
     def is_py3():
@@ -25,4 +41,6 @@ def main():
         print_special_ip()
 
 if __name__ == '__main__':
-    main()
+    itc = ip_tool_class()
+    itc.cmdloop()
+    # main()
