@@ -28,7 +28,7 @@ Broadcast address: 192.168.1.255/24
 ```
 
 ## Requirement
-* python3.x
+* python2.7 or python3.5
 
 ## License
 本ソフトウェアはMITライセンスに準拠します。  

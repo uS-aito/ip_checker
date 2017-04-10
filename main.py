@@ -21,9 +21,9 @@ class ip_tool_class(Cmd):
 def main():
     def is_py3():
         if sys.version_info[0] == 3:
-            return True
-        else:
             return False
+        else:
+            return True
 
     def print_special_ip():
         iat = ip_address_tool.IpAddressTool()
